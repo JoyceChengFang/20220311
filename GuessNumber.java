@@ -17,6 +17,7 @@ public class GuessNumber extends JFrame { //implements ActionListener
     private JTextArea log;
     private String Answer;
     private int counter;
+    private int number = 3;
 
     //建構式=>視窗設計
     public GuessNumber() {
@@ -67,14 +68,20 @@ public class GuessNumber extends JFrame { //implements ActionListener
         counter++;
         // get input String
         String str = input.getText();
-        // checkAB() => ?A?B
-        String checkab = checkAB(str);
-        // display => log
-        log.append(counter+".  "+str+" => "+checkab+"\n");
-        // if (?A?B .equals("3A0B")) => showResultDialog(true);
-        if(checkab.equals("3A0B")){ showResultDialog(true);newGame();}
-        // if (counter == 10) => showResultDialog(false);
-        if(counter == 10){showResultDialog(false);newGame();}
+        // 判斷輸入是否正確
+        String n = "[0-9]{"+number+"}";
+        if(str.matches(n)){
+            // checkAB() => ?A?B
+            String checkab = checkAB(str);
+            // display => log
+            log.append(counter+".  "+str+" => "+checkab+"\n");
+            // if (?A?B .equals("3A0B")) => showResultDialog(true);
+            if(checkab.equals(number+"A0B")){ showResultDialog(true);newGame();}
+            // if (counter == 10) => showResultDialog(false);
+            if(counter == 10){showResultDialog(false);newGame();}
+        }else{
+            JOptionPane.showMessageDialog(null, "請重新輸入");
+        }
         String t = "";
         input.setText(t);
     }
@@ -131,7 +138,7 @@ public class GuessNumber extends JFrame { //implements ActionListener
 
     //方法=>跳出訊息視窗顯示WINNER或Loser
     private void showResultDialog(boolean isWin) {
-        JOptionPane.showMessageDialog(null, isWin?"WINNER":"Loser");
+        JOptionPane.showMessageDialog(null, isWin?"WINNER":"Loser\n正確答案是 : "+Answer);
     }
 
     //方法=>開啟新局
@@ -143,8 +150,9 @@ public class GuessNumber extends JFrame { //implements ActionListener
         input.setText(t);
         log.setText(t);
         // createAnswer
-        Answer = createAnswer(3);
+        Answer = createAnswer(number);
         System.out.println(Answer);
+        log.append("請輸入"+number+"個數字\n");
     }
 
     //方法=>程式執行進入點
